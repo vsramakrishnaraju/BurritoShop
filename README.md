@@ -1,54 +1,15 @@
 # BurritoShop
 
-### clone the repo 
+clone the proejct and cd to main folder 
 
-### go into the folder cd burrito-shop-backend 
+command "docker compose up"
 
-run "npm install"
+requiremnts: install and setup docker 
 
-in bakcend folder run "npx nodemon src/app.ts" to start the server make sure its on port 3000 
-
-Install mongoDB Compass "brew tap mongodb/brew" -> 'brew install mongodb-community@7.0" this will install mongodb. if needed update xcode command line tools 
-
-install mongodb and run "brew tap mongodb/brew" and then "brew install mongodb-community" -> "brew services start mongodb/brew/mongodb-community" 
-
-mondoDB compass GUI to view DB and collectinos 
-
-through api endpoint use postman http://localhost:3000/api/burritos and body - raw - json as below 
-
-{
-  "name": "Chicken Burrito Regular",
-  "size": "regular",
-  "price": 3
-}
-
-{
-  "name": "Chicken Burrito XL",
-  "size": "XL",
-  "price": 5
-}
-
-{
-  "name": "Veg Burrito Regular",
-  "size": "regular",
-  "price": 2.5
-}
-
-{
-  "name": "Veg Burrito XL",
-  "size": "XL",
-  "price": 4.5
-}
-
-### frontend go the folder burrito-app and "npm install" and "npm start" 
+App opens up at http://localhost:3001/order by dfault this is for postong orders but before posting orders go to http://localhost:3001/orders and post variuos burritos atleast one then come back to http://localhost:3001/order 
 
 routes 
 
 1. http://localhost:3001/order - for customer app 
 
 2. http://localhost:3001/orders - for employee app 
-
-
-
-
-

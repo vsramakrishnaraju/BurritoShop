@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import CreateOrderForm from './components/CreateOrderForm';
 import OrdersPage from './components/OrdersPage';
 
@@ -9,7 +9,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/Order" element={<CreateOrderForm />} />
         <Route path="/Orders" element={<OrdersPage />} />
-        {/* Add other routes here */}
+        <Route path="/" element={<Navigate replace to="/Order" />} />
       </Routes>
     </Router>
   );
