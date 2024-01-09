@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useCallback } from 'react';
 
 // Define TypeScript types for the data
 type Burrito = {
@@ -9,11 +8,6 @@ type Burrito = {
   price: number;
 };
 
-type OrderItem = {
-  burrito: string;
-  quantity: number;
-};
-
 const CreateOrderForm: React.FC = () => {
   const [burritos, setBurritos] = useState<Burrito[]>([]);
   const [selectedBurritoId, setSelectedBurritoId] = useState<string>('');
@@ -21,26 +15,13 @@ const CreateOrderForm: React.FC = () => {
   const [orderPreview, setOrderPreview] = useState<string>('');
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/burritos')
-      .then(response => setBurritos(response.data))
+    fetch(`http://localhost:3001/api/burritos`)
+      .then(response => response.json())
+      .then(data => setBurritos(data))
       .catch(error => console.error('Error fetching burritos:', error));
   }, []);
 
-  useEffect(() => {
-    // This effect updates the order preview whenever the selectedBurritoId or quantity changes.
-    const preview = generateOrderPreview();
-    setOrderPreview(preview);
-  }, [selectedBurritoId, quantity]);  // Dependencies on selectedBurritoId and quantity
-
-  const handleBurritoChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedBurritoId(event.target.value);
-  };
-
-  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuantity(parseInt(event.target.value, 10) || 1);
-  };
-
-  const generateOrderPreview = (): string => {
+  const generateOrderPreview = useCallback((): string => {
     if (!selectedBurritoId) return '';
 
     const selectedBurrito = burritos.find(b => b._id === selectedBurritoId);
@@ -53,16 +34,41 @@ const CreateOrderForm: React.FC = () => {
     };
 
     return JSON.stringify(orderPreview, null, 2);
+  }, [burritos, selectedBurritoId, quantity]);
+
+  useEffect(() => {
+    const preview = generateOrderPreview();
+    setOrderPreview(preview);
+  }, [selectedBurritoId, quantity, generateOrderPreview]);
+
+  const handleBurritoChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedBurritoId(event.target.value);
+  };
+
+  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuantity(parseInt(event.target.value, 10) || 1);
   };
 
   const handleSubmitOrder = () => {
     const orderData = JSON.parse(orderPreview);
-    axios.post('http://localhost:3000/api/orders', orderData)
-      .then(response => {
-        alert('Order submitted successfully!');
-        setOrderPreview('');  // Clear the order preview
-      })
-      .catch(error => console.error('Error submitting order:', error));
+    fetch(`http://localhost:3001/api/orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderData),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      alert('Order submitted successfully!');
+      setOrderPreview('');  // Clear the order preview
+    })
+    .catch(error => console.error('Error submitting order:', error));
   };
 
   return (

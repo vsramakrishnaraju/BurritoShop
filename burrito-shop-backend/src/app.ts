@@ -18,7 +18,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/burritoShop')
+mongoose.connect('mongodb://mongo:27017/burritoShop')
 .then(() => console.log('Connected to MongoDB'))
 .catch((error: Error) => console.error('MongoDB connection error:', error.message));
 
@@ -41,7 +41,7 @@ app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mongo:
+    container_name: my-mongodb-container
+    image: mongo:latest
+    command: ["mongod", "--bind_ip_all"]
+    ports:
+      - "27017:27017"  # Expose MongoDB on port 27017
+    volumes:
+      - mongodb_data:/data/db  # Persist MongoDB data
+
+  backend:
+    container_name: my-challenge-backend-container
+    build: ./burrito-shop-backend
+    ports:
+      - "3001:3001"  # This maps the container's port 3001 to the host's port 3001
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/burritoShop  # Connect to MongoDB using the custom container name
+      - NODE_OPTIONS=--max-old-space-size=4096
+    depends_on:
+      - mongo
+
+  frontend:
+    container_name: my-challenge-frontend-container
+    build: ./burrito-shop-frontend
+    ports:
+      - "3000:3000"  # Expose the frontend on port 3000
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=4096
+    depends_on:
+      - backend  # Ensure the backend service is started before the frontend service
+
+volumes:
+  mongodb_data:
+    driver: local  # Use local storage for MongoDB data persistence

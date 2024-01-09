@@ -1,0 +1,15 @@
+# syntax=docker/dockerfile:1
+
+FROM node:16
+
+WORKDIR /
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3002
+
+CMD ["npm", "start"]
