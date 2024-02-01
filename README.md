@@ -12,4 +12,9 @@ routes
 
 1. http://localhost:3000/order - for customer app 
 
-2. http://localhost:3000/orders - for employee app 
+2. http://localhost:3000/orders - for employee app
+
+DEMO Link : https://youtu.be/uWjRgL6y0Gg 
+
+[![Watch the Demo](https://img.youtube.com/vi/uWjRgL6y0Gg/hqdefault.jpg)](https://www.youtube.com/embed/uWjRgL6y0Gg)
+
